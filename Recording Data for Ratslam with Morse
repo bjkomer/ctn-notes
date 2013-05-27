@@ -1,0 +1,50 @@
+follow instructions on:
+https://code.google.com/p/ratslam/wiki/RatSLAMROS
+
+convert from regular images to compressed images:
+rosrun image_transport republish raw in:=/<name>/camera/image compressed out:=/<name>/camera/image
+e.g.:
+rosrun image_transport republish raw in:=/navbot/camera/image compressed out:=/navbot/camera/image
+
+run simulation:
+roscore
+morse run ratslam_data_gen.py
+
+record to rosbag:
+rosbag record -O navbot_outdoor3.bag navbot/camera/image/compressed navbot/odom
+
+
+launch ratslam:
+roslaunch navbot.launch
+
+play the bag file:
+rosbag play navbot_outdoor3.bag --topics navbot/camera/image/compressed
+
+
+###############
+Image Encodings
+###############
+
+http://www.ros.org/doc/electric/api/sensor_msgs/html/namespacesensor__msgs_1_1image__encodings.html
+http://www.ros.org/doc/fuerte/api/sensor_msgs/html/image__encodings_8h_source.html
+
+Morse uses RGBA8 in its cameras
+http://www.openrobots.org/morse/doc/latest/user/sensors/video_camera.html
+
+Ratslam uses BGR8 or greyscale, needs to be modified to support RGBA8
+the video display is in: local_view_scene.h other code is in: vo and lv
+
+some info on converting between the two:
+http://stackoverflow.com/questions/2049230/convert-rgba-color-to-rgb
+
+info on modifying morse camera properties, such as image size and depth captured:
+http://www.openrobots.org/morse/doc/latest/user/sensors/video_camera.html
+
+Camera Calibration:
+The camera configuration parameters implicitly define a geometric camera in blender units. Knowing that the cam_focal attribute is a value that represents the distance in Blender unit at which the largest image dimension is 32.0 Blender units,
+
+use rosbag info to calculate camera_hz: (this will just be a rough average, as the time for each image doesn't seem consistent)
+duration / #images
+seems to be around 3Hz in most cases
+
+NOTE: the data that came with ratslam has the same number of image messages as odometry messages, while by default morse has more odom

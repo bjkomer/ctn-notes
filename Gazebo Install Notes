@@ -1,0 +1,13 @@
+follow the install instructions on the gazebo site, not the ros site, ros is out of date
+
+If you get an nvidia permission denied message, add yourself to the 'video' group and reboot
+Gazebo will randomly crash if that message comes up
+
+
+
+############
+Using Gazebo
+############
+
+SDF file format info:
+http://gazebosim.org/sdf/1.3.html#name

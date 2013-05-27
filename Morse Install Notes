@@ -1,0 +1,21 @@
+need to install with cmake and include the ROS stuff in the command line options
+
+has issues finding ros_request_manager.py
+
+http://ubuntuforums.org/showthread.php?t=1249184
+
+to get pymorse working, need to add it to python path, but put it at the end, so the 2.7 stuff comes first:
+export PYTHONPATH=${PYTHONPATH}/usr/local/lib/python3/dist-packages
+
+info on blender api:
+http://www.blender.org/documentation/blender_python_api_2_66_release/
+overview of structure of morse within blender:
+http://www.openrobots.org/morse/doc/latest/dev/dev_overview.html
+
+
+############################
+Modifications to Source Code
+############################
+
+blender/main.py on line 613, the default tic rate starts commented out, this could be related to the problems with the camera being only 3Hz
+EDIT: It's not, need a camera.frequency(frequency=50) in the python script to change it

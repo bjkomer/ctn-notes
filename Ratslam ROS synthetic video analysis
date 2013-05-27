@@ -1,0 +1,70 @@
+May 22
+-pose cells seem to be in striped bars, rather than a blob, likely due to configuration settings
+-seems to be difficult for the sim model to turn correctly in beamrunner scenario
+-narrowing the rotation image and lowering it to the bottom of the picture seems to help, but bands still appear
+
+May 23
+-lower match threshold means more strict matches, larger threshold means easier matches (not very intuitive)
+-lowering vtrans_scaling seems to help with lowering the bands of activity and bringing things to blobs
+-seems to be bad with understanding translational distance, turns fine, but doesn't move forward by enough
+
+-info on each field (with defaults given)
+
+[general]
+topic_root=navbot		root name of the published messages
+ 
+[ratslam]
+image_crop_x_min=0		where the template starts in x dir
+image_crop_x_max=-1		where the template ends in x dir, -1 means use full image
+image_crop_y_min=0		where the template starts in y dir
+image_crop_y_max=-1		where the template ends in y dir, -1 means use full image
+vt_match_threshold = 0.03	Larger value means easier matches
+template_x_size=1		X size of the template for saving views
+template_y_size=1		Y size of the template for saving views
+vt_shift_match = 25		Each vt is matched at different offsets, this defines how far to offset
+vt_step_match = 5		The step size when looping through the TEMPLATE_X_SIZE or VT_SHIFT_MATCH*2+1
+vt_normalisation = 0.0		If this is greater than 0, it will set the value of current_view[i] to std::max(0.0, std::min(current_view[i] * VT_NORMALISATION / avg_value, 1.0)), where avg_value is the average across all views
+pc_vt_restore=0.05		This works against vt_active_decay and decreases the decay amount on each template at each step
+vt_panoramic=0			Whether or not the image is panoramic
+vt_patch_normalise=0
+vt_min_patch_normalisation_std=0
+
+pc_cell_x_size = 1.0		scaling factor -> related to how much actual distance each cell represents
+pc_dim_xy = 21			size of pose cell network in the x and y dimension (always square)
+pc_dim_th = 36			size of pose cell network in the theta dimension (height)
+exp_delta_pc_threshold = 2.0	experience relation must be greater than this value to create a link between experiences
+pc_vt_inject_energy = 0.15	related to the amount of energy injected to a template
+vt_active_decay = 1.0		Decay cannot go below this value, larger the decay, the less energy is injected. This is also the step size for periodically increasing decay
+
+exp_loops=20			number of loops through the experience map when doing graph relaxation
+exp_correction=0.5		value related to how much to correct position and direction in the experience map graph relaxation. 0.5 is full correction
+
+
+[visual_odometry]		
+vtrans_image_x_min=0		Sizes of template for translation
+vtrans_image_x_max=IMAGE_WIDTH
+vtrans_image_y_min=0
+vtrans_image_y_max=IMAGE_HEIGHT
+
+vrot_image_x_min=0		Sizes of template for rotation
+vrot_image_x_max=IMAGE_WIDTH
+vrot_image_y_min=0
+vrot_image_y_max=IMAGE_HEIGHT
+
+camera_fov_deg=50		used in this formula: *vrot_rads = minoffset * CAMERA_FOV_DEG / IMAGE_WIDTH * CAMERA_HZ * M_PI / 180.0; *vtrans_ms = mindiff * VTRANS_SCALING;
+camera_hz = 10			^
+vtrans_scaling = 100		scaling factor for vtrans_ms from mindiff
+vtrans_max=20			vtrans_ms cannot be greater than this value on each step
+
+
+
+-the template sizes for visual odometry are kinda weird:
+unsigned int TEMPLATE_Y_SIZE = 1;
+unsigned int TEMPLATE_X_SIZE = X_RANGE_MAX - X_RANGE_MIN;
+
+int sub_range_x = X_RANGE_MAX - X_RANGE_MIN;
+int sub_range_y = Y_RANGE_MAX - Y_RANGE_MIN;
+int x_block_size = sub_range_x / TEMPLATE_X_SIZE;
+int y_block_size = sub_range_y / TEMPLATE_Y_SIZE;
+
+where X_RANGE_MAX is vtrans_image_x_max or vrot_image_x_max, etc

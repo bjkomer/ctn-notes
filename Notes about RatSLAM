@@ -1,0 +1,33 @@
+follow this guide:
+https://code.google.com/p/ratslam/wiki/RatSLAMROS
+
+if path stuff doesn't work, might need to find and add them
+e.g. export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/home/komer/ros/vision_opencv/opencv2/
+the following seems to get all of them:
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/home/komer/ros
+
+need to also add
+export ROS_PACKAGE_PATH=/home/komer/ratslam_ros:$ROS_PACKAGE_PATH
+
+
+oxford data set:
+uses fish-eye camera that can see behind itself
+-possibly for understanding walking clockwise vs counter-clockwise around a space
+-it corrects for drift in a new path when it reaches a familiar location, really cool!
+-it can have rather large errors before correction, but this seems to match with humans
+-if your computer freezes, it could mess up the data -> each run through a bag file is slightly different
+
+stlucia data set:
+-the map it creates totally sucks if you set the bag file to publish at an extremely fast rate (i.e. 1000 times faster)
+-video seems to lag behind the map drawing at higher speeds, but the video still moves faster than normal speed
+-map drawing finishes while the video is still going
+-closing roscore seems to speed up the video briefly, and then close it
+-cars driving by, while not moving at a stop sign, make the algorithm think it moved slightly, because of the change in picture, even though the vehicle is still
+-near the end, around 5400/5768, the experience map seems to stop changing, while the video keeps going
+
+-when the bag file is played 10 times as fast, the map seems horribly wrong
+--it moves even when the car is stopped
+--it also keeps going for a bit after the bag file has stopped loading, meaning there is a delay somewhere
+--near the end the video will keep playing, but the experience map will stop
+--the map won't fully stop, the backpropagation will continue, and the location of the rat will move sometimes, but it will not move due to motion anymore
+--computer crashed at the end of the simulation

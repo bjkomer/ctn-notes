@@ -1,0 +1,134 @@
+http://www.ros.org/wiki/fuerte/Installation/Debian
+
+set these variables in the CMakeLists.txt file before running cmake
+
+set(PYTHON_LIBRARY /usr/lib/libpython2.7.so)
+set(PYTHON_EXECUTABLE /usr/bin/python2.7)
+set(PYTHON_SITE_PACKAGES_DIR /usr/lib/python2.7/site-packages)
+set(PYTHON_INCLUDE_PATH /usr/include/python2.7)
+
+
+there is sometimes a bug in the make -j8 when installing fuerte,
+a fix is here: 
+https://code.google.com/p/phusion-passenger/issues/detail?id=784
+https://code.ros.org/trac/ros/ticket/4022
+
+note: the BOOST_VERSION #ifdef doesn't seem to work, just use TIME_UTC_
+
+need to replace TIME_UTC with TIME_UTC_ in the <path>/boost/thread/xtime.hpp file
+
+
+comments relating to other issues:
+http://www.raspberrypi.org/phpBB3/viewtopic.php?t=6552
+
+
+
+if things like roscd don't work, do this:
+
+export ROS_PACKAGE_PATH=~/fuerte_workspace/sandbox:$ROS_PACKAGE_PATH
+
+
+playback from bag files might not be entirely accurate due to timing
+http://www.ros.org/wiki/ROS/Tutorials/Recording%20and%20playing%20back%20data
+
+to fix locale problem:
+export LC_ALL="C"
+
+when going through tutorials, if you are using ros fuerte,
+switch from 'catkin' to 'rosbuild' on the wiki
+
+
+RatSLAM Notes:
+
+need opencv2 for ratslam
+
+
+to make ratslam with rosmake, might need to install a few things:
+sudo apt-get install libglew-dev
+sudo apt-get install libtinyxml-dev
+
+you might get errors related to python3 when building tf if so,
+a fix that I tried is to edit ~/ros/geometry/tf/build/CMakeCache.txt
+and replace all occurances of Python3.2mu with Python2.7
+
+
+had an issue with opencv not being found, reinstalling put it in the correct place:
+sudo apt-get remove ros-fuerte-opencv2
+sudo apt-get install ros-fuerte-opencv2
+
+might run into a problem when running, due to compressed image transport not being found
+rosmake compressed_image_transport
+
+if stuff breaks after computer restarts:
+export ROS_PACKAGE_PATH=~/<Missing Locations>:$ROS_PACKAGE_PATH
+
+####
+RVIZ
+####
+
+when building rviz for ros, assimp might be missing:
+sudo apt-get install libassimp-dev
+apply this patch:
+https://code.ros.org/trac/ros-pkg/attachment/ticket/5498/rviz_enable_assimp3.patch
+this will allow assimp3 compatibility, if it still doesn't work (IS_ASSIMP3 not getting defined) force it to be defined
+
+yaml-cpp might be missing:
+sudo apt-get install libyaml-cpp-dev
+
+might also run into an issue with MOC and Boost, info on the fix is here:
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=652795
+need to add this like to various CMakeLists.txt files within the qt4_wrap_cpp() calls at the end
+OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+might need to downgrade to a lower version of boost if nothing works, or get QT5 if it is out
+
+another problem with sip not being found might show up:
+sudo apt-get install python-sip-dev
+
+and a further error relating to qt:
+sudo apt-get install python-qt4-dev
+
+################
+Gazebo Tutorials
+################
+
+if rosmake fails due to nvidia-cg-toolkit-installer:
+sudo apt-get install nvidia-cg-toolkit
+
+you also might need to do:
+
+for colladadom:
+sudo apt-get install libxml2-dev
+
+for gazebo: (protobuf error)
+http://answers.ros.org/question/37368/rosmake-cannot-find-protobuf-while-making-gazebo_worlds-in-fuerte/
+rosws set --svn simulator_gazebo https://code.ros.org/svn/ros-pkg/stacks/simulator_gazebo/trunk
+rosws update
+
+for gazebo_plugins: (pcl not found)
+-a bunch of things might be broken, one of them is eigen3, do an apt-get to install it:
+sudo apt-get install libeigen3-dev
+sudo apt-get install libcppunit-dev
+
+encountered a cmake error where CPPUNIT was not set, this seemed to fix it:
+-go to CMakeLists.txt in ~/ros/orocos_kinematics_dynamics/orocos_kdl
+##-around line 69 add the following: (might be different on your machine)
+##SET(CPPUNIT /usr/include/cppunit)
+##-it would not find CPPUNIT, and then still append the "dl" so the next few lines would think it has been found, and errors will show up later
+-go to CMakeLists.txt in ~/ros/orocos_kinematics_dynamics/orocos_kdl/tests and add:
+SET(ENABLE_TESTS "")
+
+
+--possible fix is to get pcl-1.6 from source
+-need to build with ROS support on:
+cmake -DUSE_ROS=ON ..
+
+may also need:
+sudo apt-get install libflann-dev
+sudo apt-get install libusb-1.0-0-dev
+sudo apt-get install libvtk5-dev
+sudo apt-get install libopenni-dev
+sudo apt-get install libgtest-dev
+sudo apt-get install doxygen
+sudo apt-get install libsphinx2-dev
+
