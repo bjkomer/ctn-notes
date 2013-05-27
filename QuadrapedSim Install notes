@@ -1,0 +1,7 @@
+may need to fix python path for panda3d:
+export PYTHONPATH=/usr/share/panda3d:/opt/panda3d:/opt/panda3d/share/panda3d/direct:/opt/panda3d/lib/panda3d:/opt/ros/fuerte/lib/python2.7/dist-packages:
+
+need to make sure the panda.pth file is in the python path
+##export PYTHONPATH=/usr/lib/python2.6/dist-packages:$PYTHONPATH
+
+sudo cp /usr/lib/python2.6/dist-packages/panda3d.pth /usr/lib/python2.7/dist-packages/panda3d.pth
