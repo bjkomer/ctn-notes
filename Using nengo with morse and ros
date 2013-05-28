@@ -1,0 +1,16 @@
+nengo-cl doesn't seem to like the 'with' statement in python, you can get it to work with:
+from __future__ import with_statement
+
+random problems arise because the Jython version nengo uses isn't fully compatable with Python 2.7, example here:
+http://stackoverflow.com/questions/3020966/jython-syntaxerror
+https://github.com/getsentry/raven-python/issues/64
+
+
+
+################
+Changes to rospy
+################
+
+__init__.py line 61, cannot use from <> import *, need to change this line to:
+from .exceptions import ROSException, ROSSerializationException, ROSInitException, ROSInterruptException, ROSInternalE    xception, TransportException, TransportTerminated, TransportInitError
+

@@ -1,0 +1,37 @@
+##########
+Background
+##########
+
+numpy: (especially look at views and broadcasting)
+http://www.scipy.org/Tentative_NumPy_Tutorial
+
+scipy:
+http://docs.scipy.org/doc/scipy/reference/
+
+ndimage:
+http://docs.scipy.org/doc/scipy/reference/tutorial/ndimage.html
+
+other implementation:
+https://github.com/coxlab/ratslam-python/blob/master/ratslam/pose_cell_network.py
+
+numpy notes:
+argmin can be used on numpy arrays
+broadcasting isn't always the most efficient method for every algorithm, sometimes faster to have the outer loop as a python loop
+use the 'output' argument for more efficiency with ndimage functions
+can shift the origin of filters (origin is shifted the opposite way in a convolution)
+
+#####
+Goals
+#####
+
+build the pose cell network using numpy (likely represented as an image)
+
+use odometry to influence the pose cells
+
+eventually use vision to influence pose cells as well
+
+build multiple layers of pose cells to represent larger spaces
+
+represent pose cells in nengo_theano (likely 1 cell to 1 neuron mapping, have the connections define the functionality)
+
+see how fast/good python is at using ROS image data (do simple stuff with it at first, and then complex things)
