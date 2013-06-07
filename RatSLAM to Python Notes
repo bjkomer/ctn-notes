@@ -16,9 +16,33 @@ https://github.com/coxlab/ratslam-python/blob/master/ratslam/pose_cell_network.p
 
 numpy notes:
 argmin can be used on numpy arrays
+
 broadcasting isn't always the most efficient method for every algorithm, sometimes faster to have the outer loop as a python loop
+
 use the 'output' argument for more efficiency with ndimage functions
+
 can shift the origin of filters (origin is shifted the opposite way in a convolution)
+
+filters have a 'wrap' option, which looks like it will be quite useful here
+
+gaussian_filter doesn't have the origin change option, so it is not as useful as correlate
+the correlate from numpy doesn't have the 'wrap' option, but the ndimage one does
+
+get glumpy to view stuff easier when coding:
+https://code.google.com/p/glumpy/
+or matplotlib if speed isn't an issue
+
+might need mayavi for more complex stuff (3D visualization of pose cells)
+example for plotting 3D points with a value parameter shown below:
+http://scipy-lectures.github.io/advanced/3d_plotting/index.html
+
+#######################
+Biological Plausibility
+#######################
+
+According to: http://eprints.qut.edu.au/37593/1/c37593.pdf
+The (x,y) and (theta) pose cells should be in two different systems, they are just combined into one for simplicity
+
 
 #####
 Goals
@@ -35,3 +59,38 @@ build multiple layers of pose cells to represent larger spaces
 represent pose cells in nengo_theano (likely 1 cell to 1 neuron mapping, have the connections define the functionality)
 
 see how fast/good python is at using ROS image data (do simple stuff with it at first, and then complex things)
+
+####################
+Notes from the Paper
+####################
+
+Pose cells and local view cells are both 3D grids, but are different in function
+"Activated local view cells are constantly being associated with the pose cells that are highly 
+activated at that time through strengthening of weighted connections between them."
+
+sigma value of 0.0003 was used in the pose cell change limit formula, but this should be tuned.
+
+global inhibition constant set to 0.004
+
+activation levels limited to non-negative values
+
+Four Stages to the Internal Dynamics:
+
+1. Internal X-Y Layer Update
+2. Inter-Layer Update (theta)
+3. Global Inhibition
+4. Normalization
+
+######################
+Notes from RatSLAM ROS
+######################
+
+The gaussian filters used on the update step are normalized to a pdf of 1 before being used
+
+###################
+Profiling for Speed
+###################
+
+python -m cProfile -o output.file ros_simulate.py <args>
+
+gprof2dot -f pstats <profile_pstats_file> | dot -Tsvg -o callgraph.svg
