@@ -12,6 +12,9 @@ http://www.blender.org/documentation/blender_python_api_2_66_release/
 overview of structure of morse within blender:
 http://www.openrobots.org/morse/doc/latest/dev/dev_overview.html
 
+Useful info on creating sensors and actuators on slide 20 and 21
+http://homepages.laas.fr/slemaign/lectures/introduction-to-morse/#introduction-to-morse.html
+
 
 ############################
 Modifications to Source Code

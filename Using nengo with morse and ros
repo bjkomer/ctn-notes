@@ -14,3 +14,19 @@ Changes to rospy
 __init__.py line 61, cannot use from <> import *, need to change this line to:
 from .exceptions import ROSException, ROSSerializationException, ROSInitException, ROSInterruptException, ROSInternalE    xception, TransportException, TransportTerminated, TransportInitError
 
+################################
+Hooking up jython nengo to morse
+################################
+
+modify this file to add socket interfaces to sensors/actuators being used:
+https://github.com/morse-simulator/morse/blob/master/src/morse/builder/data.py
+
+download json for jython, to read from sockets:
+http://opensource.xhaus.com/projects/show/jyson
+need to remember to add it to the sys.path
+
+torque/force with socket uses this format for messages:
+{"force":[1,1,1],"torque":[100,1,1]}
+
+running the controller:
+nengo-cl `pwd`/control_nonlinear_jython.py

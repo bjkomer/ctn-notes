@@ -21,6 +21,9 @@ play the bag file:
 rosbag play navbot_outdoor3.bag --topics navbot/camera/image/compressed
 
 
+Note: for changing the name of topics, use:
+http://ros.org/wiki/topic_tools/relay
+
 ###############
 Image Encodings
 ###############

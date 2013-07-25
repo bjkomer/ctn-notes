@@ -36,6 +36,16 @@ might need mayavi for more complex stuff (3D visualization of pose cells)
 example for plotting 3D points with a value parameter shown below:
 http://scipy-lectures.github.io/advanced/3d_plotting/index.html
 
+to get cv_bridge to work (for converting ROS images to numpy images, through cv)
+
+export PYTHONPATH=$PYTHONPATH:/home/komer/ros/vision_opencv/cv_bridge/src/cv_bridge
+
+for getting PyOpenCl to work:
+http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=682435
+
+Difference of Gaussian is NOT separable. The end of this paper shows an efficient way to calculate it is a separable manner:
+http://www.cs.northwestern.edu/~sco590/winnemoeller-cag2012.pdf
+
 #######################
 Biological Plausibility
 #######################

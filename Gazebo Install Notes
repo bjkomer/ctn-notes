@@ -11,3 +11,18 @@ Using Gazebo
 
 SDF file format info:
 http://gazebosim.org/sdf/1.3.html#name
+
+####################
+If models don't load
+####################
+
+inside the build directory:
+export GAZEBO_PLUGIN_PATH=`pwd`:$GAZEBO_PLUGIN_PATH
+
+########
+Building
+########
+
+cmake -DCMAKE_INSTALL_PREFIX=~/local ..
+make
+make install
